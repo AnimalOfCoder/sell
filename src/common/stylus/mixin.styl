@@ -1,0 +1,23 @@
+/*
+1像素边框实现思路：
+    利用伪类+缩放，在需要画边框的元素定义伪类，伪类相对于该元素是绝对定位，通过伪类定义1像素边框。
+    再通过一个class对边框进行缩放，根据设备dpr设定缩放比例
+*/
+border-1px($color)
+    position: relative
+    &:after
+        display: block
+        position: absolute
+        left: 0
+        bottom: 0
+        width: 100%
+        border-top: 1px solid $color
+        content: ' '
+    &:before
+        display: block
+        position: absolute
+        left: 0
+        top: 0
+        width: 100%
+        border-bottom: 1px solid $color
+        content: ' '
