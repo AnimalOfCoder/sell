@@ -49,21 +49,21 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     before(app) {
       app.get('/api/seller', (req, res) => {
         res.json({
-          // 这里是你的json内容
+          // 这里是json内容
           errno: 0,
           data: seller
         })
       }),
       app.get('/api/goods', (req, res) => {
         res.json({
-          // 这里是你的json内容
+          // 这里是json内容
           errno: 0,
           data: goods
         })
       }),
       app.get('/api/ratings', (req, res) => {
         res.json({
-          // 这里是你的json内容
+          // 这里是json内容
           errno: 0,
           data: ratings
         })

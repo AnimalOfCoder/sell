@@ -25,5 +25,6 @@ module.exports = {
     'semi': ['error', 'always'],
     //忽略缩进
     'indent': 0,
+    'space-before-function-paren': 0,
   }
 }

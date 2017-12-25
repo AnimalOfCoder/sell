@@ -21,3 +21,12 @@ border-1px($color)
         width: 100%
         border-bottom: 1px solid $color
         content: ' '
+/*
+不同设备对应倍数图片
+*/
+bg-image($url)
+    // 默认为2x图
+    background-image: url($url + "@2x.png")
+    // dpr为3使用3x图
+    @media (-webkit-min-device-pirxel-ratio: 3),(min-device-pirxel-ratio: 3)
+        background-image: url($url + "@3x.png")

@@ -1,12 +1,14 @@
 import Vue from 'vue';
 import App from './App';
 import VueRouter from 'vue-router';
+import VueResource from 'vue-resource';
 import goods from './components/goods/goods.vue';
 import ratings from './components/ratings/ratings.vue';
 import seller from './components/seller/seller.vue';
 import './common/stylus/index.styl';
-// 安装vue-router插件
+// 全局注册
 Vue.use(VueRouter);
+Vue.use(VueResource);
 /* eslint-disable */
 //实例化VueRouter
 var router = new VueRouter({
