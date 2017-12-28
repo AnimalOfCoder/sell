@@ -10,3 +10,23 @@
         &::after
             -webkit-transform: scaleY(0.5)
             transform: scaleY(0.5)
+/*
+ 除了clear：both用来闭合浮动的，
+ 其他代码无非都是为了隐藏掉content生成的内容
+ 1) display:block 使生成的元素以块级元素显示,占满剩余空间;
+ 2) height:0 避免生成内容破坏原有布局的高度。
+ 3) visibility:hidden 使生成的内容不可见，并允许可能被生成内容盖住的内容可以进行点击和交互;
+ 4）通过 content:"."生成内容作为最后一个元素，至于content里面是点还是其他都是可以的，
+    例如oocss里面就有经典的 content:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",有些版本可能content里面内容为空,
+    不推荐这样做,firefox直到7.0 content:”" 仍然会产生额外的空隙；
+ 具体见：http://www.iyunlu.com/view/css-xhtml/55.html
+*/
+.clearfix
+    display: inline-block
+    &:after    
+        display: block
+        content: "."
+        height: 0
+        line-height: 0
+        clear: both
+        visibility: hidden
