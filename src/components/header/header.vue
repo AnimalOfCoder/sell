@@ -30,41 +30,71 @@
         <div class="background">
             <img :src="seller.avatar" width="100%" height="100%">
         </div>
-        <div v-show="detailShow" class="detail">
-            <div class="detail-wrapper clearfix">
-                <div class="detail-main"></div>
+        <transition name="fade">
+            <div v-show="detailShow" class="detail">
+                <div class="detail-wrapper clearfix">
+                    <div class="detail-main">
+                        <h1>{{seller.name}}</h1>
+                        <div class="star-wrapper">
+                            <star :size="48" :score="seller.score"></star>
+                        </div>
+                        <div class="sale-title">
+                            <div class="sale-line"></div>
+                            <div class="sale-text">优惠信息</div>
+                            <div class="sale-line"></div>
+                        </div>
+                        <ul v-if="seller.supports" class="supports">
+                            <li class="support-item" v-for="item in seller.supports">
+                                <span class="s-icon" :class="classMap[item.type]"></span>
+                                <span class="text">{{item.description}}</span>
+                            </li>
+                        </ul>
+                        <div class="sale-title">
+                            <div class="sale-line"></div>
+                            <div class="sale-text">商家公告</div>
+                            <div class="sale-line"></div>
+                        </div>
+                        <div class="notice-wrapper">
+                            <span class="notice-content">{{seller.bulletin}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="detail-close" @click="closeDetail">
+                    <i class="icon-close"></i>
+                </div>
             </div>
-            <div class="detail-close" @click="closeDetail">
-                <i class="icon-close"></i>
-            </div>
-        </div>
+        </transition>
     </div>
 </template>
 
 <<script type="text/ecmascript-6">
-export default {
-    created() {
-        this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
-    },
-    data() {
-        return {
-            detailShow: false
-        };
-    },
-    methods: {
-        showDetail() {
-            this.detailShow = true;
+    import star from '../star/star.vue';
+    export default {
+        created() {
+            this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
         },
-        closeDetail() {
-            this.detailShow = false;
+        data() {
+            return {
+                detailShow: false
+            };
+        },
+        methods: {
+            showDetail() {
+                this.detailShow = true;
+            },
+            closeDetail() {
+                this.detailShow = false;
+            }
+        },
+        components: {
+            star
+        },
+        props: {
+            seller: {
+                type: Object
+            }
         }
-    },
-    props: {
-        seller: {
-            type: Object
-        }
-    }
-};
+    };
 </script>
 
 <<style lang="stylus" rel="stylesheet/stylus">
@@ -182,7 +212,7 @@ export default {
             width: 100%
             height: 100%
             z-index: -1
-            filter: blur(10px)  
+            filter: blur(10px)
         .detail
             position: fixed
             top: 0
@@ -191,12 +221,78 @@ export default {
             width: 100%
             height: 100%
             overflow: auto
-            background: rgba(7,17,27,0.8)   
+            background-color: rgba(7,17,27,0.8)
+            &.fade-enter-active, &.fade-leave-active
+                transition: all 0.5s ease  
+                opacity: 1   
+            &.fade-enter, &.fade-leave-active
+                opacity: 0 
             .detail-wrapper
                 min-height: 100%
+                width: 100%
                 .detail-main
                     margin-top: 64px
                     padding-bottom: 64px
+                    h1
+                    font-size: 16px
+                    line-height: 16px
+                    text-align: center
+                    font-weight: 700
+                    .star-wrapper
+                        margin: 16px 0 28px 0
+                        text-align: center
+                    .sale-title
+                        display: flex
+                        margin: 0 36px 0 36px
+                        .sale-line
+                            flex: 1
+                            height: 1px
+                            background-color: rgba(255,255,255,0.2)
+                            margin-top: 8px
+                            // position: relative
+                            // top: -6px
+                            // border-bottom: 1px solid rgba(255,255,255,0.2)
+                        .sale-text
+                            margin: 0 12px 0 12px
+                            font-weight: 700
+                    .supports
+                        padding: 24px 12px 28px 12px
+                        margin: 0 36px
+                        .support-item
+                            font-size: 0
+                            margin-top: 12px
+                            &:first-child
+                                margin-top: 0px
+                            .s-icon
+                                display: inline-block
+                                margin-right: 6px
+                                vertical-align: top
+                                width: 16px
+                                height: 16px
+                                background-size: 16px 16px
+                                background-repeat: no-repeat
+                                &.decrease
+                                    bg-image('decrease_2')
+                                &.discount
+                                    bg-image('discount_2')
+                                &.guarantee
+                                    bg-image('guarantee_2')
+                                &.invoice
+                                    bg-image('invoice_2')
+                                &.special
+                                    bg-image('special_2')
+                            .text
+                                line-height: 16px
+                                vertical-align: top
+                                font-size: 12px
+                                font-weight: 200
+                    .notice-wrapper
+                        margin: 24px 36px
+                        padding: 0 12px
+                        .notice-content
+                            font-size: 12px
+                            font-weight: 200
+                            line-height: 24px          
             .detail-close
                 position: relative
                 width: 32px
@@ -204,9 +300,6 @@ export default {
                 margin: -64px auto 0 auto
                 clear: both
                 font-size: 32px       
-
-                        
-                            
 
 </style>
 
