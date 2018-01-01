@@ -1,7 +1,7 @@
 <template>
   <div>
    <v-header :seller="seller"></v-header>
-   <div class="tab border-1px">
+   <div class="tab border-1px border-1px-top">
     <div class="tab-item">
     <!-- 使用 router-link 组件来导航. -->
     <!-- 通过传入 `to` 属性指定链接. -->
@@ -61,6 +61,7 @@
       height: 40px
       line-height: 40px
       border-1px(rgba(7, 17, 27, 0.1))
+      border-1px-top(rgba(7, 17, 27, 0.1))
       .tab-item
         flex: 1
         text-align: center
