@@ -40,7 +40,7 @@ vue.2.0的渲染过程：
 let app = new Vue({
   router: router,
   //components: { App }  vue1.0的写法
-  render: h => h(App)
+  render: h => h(App),
 }).$mount('#app');
 // 打开的默认路径
 router.push('/goods');

@@ -1,4 +1,4 @@
-<<template>
+<template>
     <div class="header">
         <div class="content-wrapper">
             <div class="avatar">
@@ -67,7 +67,7 @@
     </div>
 </template>
 
-<<script type="text/ecmascript-6">
+<script type="text/ecmascript-6">
     import star from '../star/star.vue';
     export default {
         created() {
@@ -97,7 +97,7 @@
     };
 </script>
 
-<<style lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus">
     @import "../../common/stylus/mixin";
     .header
         position: relative

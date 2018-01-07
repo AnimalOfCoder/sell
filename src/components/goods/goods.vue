@@ -1,4 +1,4 @@
-<<template>
+<template>
     <div class="goods">
         <div class="menu-wrapper" ref="menuWrapper">
             <ul class="menu">
@@ -28,17 +28,23 @@
                                 <div class="price">
                                     <span class="new-price">￥{{food.price}}</span><span class="old-price" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                                 </div>
+                                <div class="cartcontrol-wrapper">
+                                    <cartcontrol :food="food"></cartcontrol>
+                                </div>
                             </div>
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
+        <shopcart :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
     </div>
 </template>
 
-<<script type="text/ecmascript-6">
+<script type="text/ecmascript-6">
 import BScroll from 'better-scroll';
+import shopcart from '../shopcart/shopcart.vue';
+import cartcontrol from '../cartcontrol/cartcontrol.vue';
 const ERR_OK = 0;
 export default {
     data() {
@@ -59,6 +65,17 @@ export default {
                 }
             }
             return 0;
+        },
+        selectFoods() {
+            let foods = [];
+            this.goods.forEach(good => {
+                good.foods.forEach(food => {
+                    if (food.count) {
+                        foods.push(food);
+                    }
+                });
+            });
+            return foods;
         }
     },
     created() {
@@ -104,7 +121,8 @@ export default {
                 当 probeType 为 3 的时候，不仅在屏幕滑动的过程中，而且在 momentum 滚动动画运行过程中实时派发 scroll 事件。
                 如果没有设置该值，其默认值为 0，即不派发 scroll 事件。
                 */
-                probeType: 3
+                probeType: 3,
+                click: true
             });
             // 绑定foodScroll，计算纵轴滚动偏移量
             this.foodsScroll.on('scroll', (pos) => {
@@ -125,7 +143,7 @@ export default {
         },
         // 菜单选中触发滚动
         selectMenu(index, event) {
-            // 浏览器原生点击事件无该属性，表明在PC模式
+            // 浏览器原生点击事件无该属性，防止在PC端触发两次点击事件
             if (!event._constructed) {
                 return;
             }
@@ -146,11 +164,20 @@ export default {
             */
             this.foodsScroll.scrollToElement(el, 300);
         }
+    },
+    components: {
+        shopcart,
+        cartcontrol
+    },
+    props: {
+        seller: {
+                type: Object
+            }
     }
 };
 </script>
 
-<<style lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus">
     @import "../../common/stylus/mixin";
     .goods
         display: flex
@@ -253,6 +280,9 @@ export default {
                             font-weight: normal
                             font-size: 10px
                             color: rgb(147,153,159) 
-
+                    .cartcontrol-wrapper
+                        position: absolute
+                        right: 0
+                        bottom: 12px
 </style>
 

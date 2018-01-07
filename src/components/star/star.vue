@@ -1,10 +1,10 @@
-<<template>
+<template>
     <div class="star" :class="starType">
         <span v-for="itemClass in itemClasses" :class="itemClass" class="star-item"></span>
     </div>
 </template>
 
-<<script type="text/ecmascript-6">
+<script type="text/ecmascript-6">
     const LENGTH = 5;
     const CLS_ON = 'on';
     const CLS_OFF = 'off';
