@@ -1,4 +1,5 @@
 <template>
+    <!-- 购物车组件 -->
     <div class="shopcart">
         <div class="content" @click="toggleList">
             <div class="content-left">
@@ -11,7 +12,8 @@
                 <div class="price" :class="{'highlight': totalPrice>0}">￥{{totalPrice}}</div>
                 <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
             </div>
-            <div class="content-right">
+            <!-- 阻止单击事件继续传播 -->
+            <div class="content-right" @click.stop="pay">
                 <div class="pay" :class="payClass">{{payDesc}}</div>
             </div>
         </div>
@@ -30,7 +32,7 @@
             <div class="shopcart-list" v-show="listShow">
                 <div class="list-header">
                     <h1 class="title">购物车</h1>
-                    <span class="empty">清空</span>
+                    <span class="empty" @click="empty">清空</span>
                 </div>
                 <div class="list-content" ref="listContent">
                     <ul>
@@ -40,14 +42,18 @@
                                 <span>￥{{food.price*food.count}}</span>
                             </div>
                             <div class="cartcontrol-wrapper">
-                                <cartcontrol :food="food"></cartcontrol>
+                                <v-cartcontrol :food="food"></v-cartcontrol>
                             </div>
                         </li>
                     </ul>
                 </div>
             </div>
         </transition>
+        <transition name="fade">
+            <div class="list-mask" v-show="listShow" @click="hideList"></div>
+        </transition>
     </div>
+    
 </template>
 <script type="text/ecmascript-6">
 // 引入事件传递中心
@@ -157,14 +163,29 @@ export default {
             }
         },
         toggleList() {
-            if (!this.totalCount) {
-                return;
+            if (this.totalCount) {
+                this.fold = !this.fold;
             }
-            this.fold = !this.fold;
+        },
+        // 清空购物车
+        empty() {
+            this.selectFoods.forEach((food) => {
+                food.count = 0;
+            });
+        },
+        // 隐藏购物侧
+        hideList() {
+            this.fold = true;
+        },
+        // 结算-----待完善
+        pay() {
+            if (this.totalPrice >= this.minPrice) {
+                window.alert(`支付${this.totalPrice}元`);
+            }
         }
     },
     components: {
-        cartcontrol
+        'v-cartcontrol': cartcontrol
     },
     computed: {
         // 总价格计算
@@ -389,5 +410,20 @@ export default {
                         position: absolute
                         right: 0
                         bottom: 6px
+        .list-mask
+            position: fixed
+            top: 0
+            left: 0
+            width: 100%
+            height: 100%
+            z-index: -2
+            backdrop-filter: blur(10px)
+            background: rgba(7,17,27,0.6)
+            &.fade-enter-active,&.fade-leave-active
+                transition: all 0.5s 
+                opacity: 1
+            &.fade-enter,&.fade-leave-to
+                opacity: 0
+
 </style>
 

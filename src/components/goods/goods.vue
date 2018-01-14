@@ -1,4 +1,5 @@
 <template>
+    <!-- 商品页组件 -->
     <div class="goods">
         <div class="menu-wrapper" ref="menuWrapper">
             <ul class="menu">
@@ -15,7 +16,7 @@
                 <li v-for="item in goods" class="food-list food-list-hook">
                     <h1 class="title">{{item.name}}</h1>
                     <ul>
-                        <li v-for="food in item.foods" class="food-item border-1px">
+                        <li v-for="food in item.foods" class="food-item border-1px" @click="selectFood(food,$event)">
                             <div class="icon">
                                 <img :src="food.icon" width="57px" height="57px">
                             </div>
@@ -29,7 +30,7 @@
                                     <span class="new-price">￥{{food.price}}</span><span class="old-price" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                                 </div>
                                 <div class="cartcontrol-wrapper">
-                                    <cartcontrol :food="food"></cartcontrol>
+                                    <v-cartcontrol :food="food"></v-cartcontrol>
                                 </div>
                             </div>
                         </li>
@@ -37,7 +38,8 @@
                 </li>
             </ul>
         </div>
-        <shopcart :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
+        <v-shopcart :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></v-shopcart>
+        <v-food :food="selectedFood" ref="food"></v-food>
     </div>
 </template>
 
@@ -45,13 +47,15 @@
 import BScroll from 'better-scroll';
 import shopcart from '../shopcart/shopcart.vue';
 import cartcontrol from '../cartcontrol/cartcontrol.vue';
+import food from '../food/food.vue';
 const ERR_OK = 0;
 export default {
     data() {
         return {
             goods: [],
             listHeight: [],
-            scrollY: 0
+            scrollY: 0,
+            selectedFood: {}
         };
     },
     computed: {
@@ -99,6 +103,9 @@ export default {
         });
     },
     methods: {
+        /*
+            编程习惯，带下划线的方法内部调用，不带下划线的方法可让外部调用
+        */
         // 初始化beteerScroll插件方法
         _initScorll() {
             this.menuScroll = new BScroll(this.$refs.menuWrapper, {
@@ -163,11 +170,20 @@ export default {
             作用：滚动到指定的目标元素。
             */
             this.foodsScroll.scrollToElement(el, 300);
+        },
+        // 点击的食物
+        selectFood(food, event) {
+            if (!event._constructed) {
+                return;
+            }
+            this.selectedFood = food;
+            this.$refs.food.show();
         }
     },
     components: {
-        shopcart,
-        cartcontrol
+        'v-shopcart': shopcart,
+        'v-cartcontrol': cartcontrol,
+        'v-food': food
     },
     props: {
         seller: {
