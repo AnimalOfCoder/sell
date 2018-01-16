@@ -45,14 +45,14 @@
         },
         data() { // 自身定义的数据
             return {
-            selectType: { // 选择type
-                type: Number,
-                default: ALL
-            },
-            onlyContent: {
-                type: Boolean,
-                default: false
-            }
+                selectType: { // 选择type
+                    type: Number,
+                    default: ALL
+                },
+                onlyContent: {
+                    type: Boolean,
+                    default: false
+                }
             };
         },
         methods: {
@@ -118,7 +118,6 @@
                 line-height: 16px
                 &.active
                     color: #fff
-                    background: rgba(0,160,220,0)
                 .count
                     margin-left: 2px
                     font-size: 8px

@@ -15,19 +15,29 @@
       <router-link to="/seller">商家</router-link>
     </div>
    </div>
-   <!-- 路由出口 -->
-   <!-- 路由匹配到的组件将渲染在这里 -->
-   <router-view :seller="seller"></router-view>
+   <!-- <keep-alive> 包裹动态组件时，会缓存不活动的组件实例，而不是销毁它们 -->
+   <keep-alive>
+     <!-- 路由出口 -->
+     <!-- 路由匹配到的组件将渲染在这里 -->
+     <router-view :seller="seller"></router-view>
+   </keep-alive>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import header from './components/header/header.vue';
+  import {urlParse} from './common/js/util';
   const ERR_OK = 0;
   export default {
     data() {
       return {
-        seller: {}
+        seller: {
+          // 使用一个立即执行函数，获取url中的id
+          id: (() => {
+            let queryParam = urlParse();
+            return queryParam.id;
+          })()
+        }
       };
     },
     /*
@@ -37,11 +47,12 @@
     **/
     created() {
       // GET /someUrl
-      this.$http.get('/api/seller').then(response => {
+      this.$http.get('/api/seller?id=' + this.seller.id).then(response => {
         response = response.body;
         if (response.errno === ERR_OK) {
-          this.seller = response.data;
-          console.log(this.seller);
+          // this.seller = response.data;// 直接赋值会id丢失，this.seller.id=undefind
+          this.seller = Object.assign({}, this.seller, response.data); // 对象合并
+          console.log(this.seller.id);
         }
       }, response => {
         // error callback
